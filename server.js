@@ -5,38 +5,46 @@ const server = fastify();
 
 const database = new DatabaseMemory()
 
-server.get('/alunos', () => {
+server.get('/times', () => {
     return database.list()
 })
 
-server.post('/alunos', (req, res) => {
-    const { nome, idade, matriculado, time } = req.body
+server.post('/times', (req, res) => {
+    const { nome, idade, estaduais, brasileiros, libertadores, copabrasil, sulamericana, mundiais  } = req.body
 
     database.create({
         nome,
         idade,
-        matriculado,
-        time
+        estaduais,
+        brasileiros,
+        libertadores,
+        copabrasil,
+        sulamericana,
+        mundiais
     })
 
     return res.status(201).send()
 })
 
-server.put('/alunos/:id', (req, res) => {
+server.put('/times/:id', (req, res) => {
    const id = req.params.id
-   const { nome, idade, matriculado, time } = req.body
+   const { nome, idade, estaduais, brasileiros, libertadores, copabrasil, sulamericana, mundiais } = req.body
 
    database.update(id, {
        nome,
        idade,
-       matriculado,
-       time
+       estaduais,
+       brasileiros,
+       libertadores,
+       copabrasil,
+       sulamericana,
+       mundiais
    })
 
    res.status(204).send()
 })
 
-server.delete('/alunos/:id', (req, res) => {
+server.delete('/times/:id', (req, res) => {
     const id = req.params.id
     database.delete(id)
     return res.status(200).send()
