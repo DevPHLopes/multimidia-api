@@ -1,52 +1,57 @@
 import { fastify } from "fastify";
-import { DatabaseMemory } from "./database-memory.js";
+import cors from '@fastify/cors'
+
+import { DatabaseMemory } from "./database/database-memory.js";
+import { DatabaseSql } from "./database/database-sql.js";
 
 const server = fastify();
 
-const database = new DatabaseMemory()
-
-server.get('/times', () => {
-    return database.list()
+await server.register(cors, {
+    origin: '*',
+    methods: ['GET']
 })
 
-server.post('/times', (req, res) => {
-    const { nome, idade, estaduais, brasileiros, libertadores, copabrasil, sulamericana, mundiais  } = req.body
+// const database = new DatabaseMemory()
+const database = new DatabaseSql()
 
-    database.create({
+server.get('/titulos', async () => {
+    return await database.list()
+})
+
+server.post('/titulos', async (req, res) => {
+    const { nome, estadual, brasileiro, copabrasil, libertadores, mundial } = req.body
+
+    await database.create({
         nome,
-        idade,
-        estaduais,
-        brasileiros,
-        libertadores,
+        estadual,
+        brasileiro,
         copabrasil,
-        sulamericana,
-        mundiais
+        libertadores,
+        mundial
     })
 
     return res.status(201).send()
 })
 
-server.put('/times/:id', (req, res) => {
+server.put('/titulos/:id', async (req, res) => {
    const id = req.params.id
-   const { nome, idade, estaduais, brasileiros, libertadores, copabrasil, sulamericana, mundiais } = req.body
+   const { nome, estadual, brasileiro, copabrasil, libertadores, mundial, } = req.body
 
-   database.update(id, {
+   await database.update(id, {
        nome,
-       idade,
-       estaduais,
-       brasileiros,
-       libertadores,
+       estadual,
+       brasileiro,
        copabrasil,
-       sulamericana,
-       mundiais
+       libertadores,
+       mundial
    })
 
-   res.status(204).send()
+   return res.status(204).send()
 })
 
-server.delete('/times/:id', (req, res) => {
+server.delete('/titulos/:id', async (req, res) => {
     const id = req.params.id
-    database.delete(id)
+    await database.delete(id)
     return res.status(200).send()
 })
 
