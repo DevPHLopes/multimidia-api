@@ -19,6 +19,7 @@ server.get('/titulos', async () => {
 })
 
 server.post('/titulos', async (req, res) => {
+    
     const { nome, estadual, brasileiro, copabrasil, libertadores, mundial } = req.body
 
     await database.create({

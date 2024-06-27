@@ -3,7 +3,7 @@ import { db } from './sql.js'
 
 export class DatabaseSql {
     async list() {
-        const titulos = await db.query`select * from titulos`
+        const titulos = await db.query`select * from titulo`
         return titulos.recordset
     }
 
@@ -12,21 +12,21 @@ export class DatabaseSql {
 
         const { nome, estadual, brasileiro, copabrasil, libertadores, mundial } = titulo
 
-        await db.query`insert into titulos (id, nome, estadual, brasileiro, copabrasil, libertadores, mundial) values
+        await db.query`insert into titulo (id, nome, estadual, brasileiro, copabrasil, libertadores, mundial) values
             (${tituloId}, ${nome}, ${estadual}, ${brasileiro}, ${copabrasil}, ${libertadores}, ${mundial})`
     }
 
     async update(id, titulo) {
         const { nome, estadual, brasileiro, copabrasil, libertadores, mundial } = titulo
 
-        await db.query`update titulos set 
-            clube = ${nome}, estadual = ${estadual}, brasileiro = ${brasileiro}, copabrasil = ${copabrasil},
+        await db.query`update titulo set 
+            nome = ${nome}, estadual = ${estadual}, brasileiro = ${brasileiro}, copabrasil = ${copabrasil},
             libertadores = ${libertadores}, mundial = ${mundial}
             where id = ${id}`
     }
 
     async delete(id) {
-        console.log(`delete from titulos where id = '${id}'`)
-        await db.query`delete from titulos where id = '${id}'`
+        console.log(`delete from titulo where id = '${id}'`)
+        await db.query`delete from titulo where id = '${id}'`
     }
 }
